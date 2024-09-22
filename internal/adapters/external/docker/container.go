@@ -113,7 +113,7 @@ func (h *Helper) GetContainers() ([]Container, error) {
 	return containers, nil
 }
 
-func (h *Helper) GetContianerLogs(containerId string) (io.ReadCloser, error) {
+func (h *Helper) GetContianerLogs(containerId string, tail string) (io.ReadCloser, error) {
 	client := &http.Client{
 		Transport: &http.Transport{
 			DialContext: func(_ context.Context, _ string, _ string) (net.Conn, error) {
@@ -123,9 +123,14 @@ func (h *Helper) GetContianerLogs(containerId string) (io.ReadCloser, error) {
 		Timeout: 0,
 	}
 
+	tailIn := tail
+	if len(tailIn) == 0 {
+		tailIn = "all"
+	}
+
 	url := fmt.Sprintf(
-		"http://localhost/containers/%s/logs?stdout=1&stderr=1&follow=1&tail=50",
-		containerId,
+		"http://localhost/containers/%s/logs?stdout=1&stderr=1&follow=1&tail=%s",
+		containerId, tailIn,
 	)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)

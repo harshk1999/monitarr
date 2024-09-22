@@ -92,10 +92,8 @@ func (m *Monitarr) readAndPushLogs(name string, reader io.ReadCloser) {
 		_, err := io.ReadFull(reader, headerBuffer)
 		if err != nil {
 			if err == io.EOF {
-				fmt.Println("All logs are read")
 				return
 			}
-			fmt.Println("Error reading in header buffer", err)
 			return
 		}
 
@@ -103,7 +101,6 @@ func (m *Monitarr) readAndPushLogs(name string, reader io.ReadCloser) {
 		dataBuffer := make([]byte, logLength)
 		_, err = reader.Read(dataBuffer)
 		if err != nil {
-			fmt.Println("Error reading in data buffer", err)
 			return
 		}
 

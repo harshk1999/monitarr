@@ -124,7 +124,7 @@ func (h *Helper) GetContianerLogs(containerId string) (io.ReadCloser, error) {
 	}
 
 	url := fmt.Sprintf(
-		"http://localhost/containers/%s/logs?stdout=1&stderr=1&follow=1",
+		"http://localhost/containers/%s/logs?stdout=1&stderr=1&follow=1&tail=50",
 		containerId,
 	)
 

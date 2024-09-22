@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"strings"
 	"sync"
 
 	docker_helper "github.com/hhacker1999/monitarr/internal/adapters/external/docker"
@@ -54,9 +55,13 @@ func (m *Monitarr) Run() error {
 	}
 
 	for _, v := range containers {
+		name := v.Names[0]
+		if strings.Contains(name, "psql") || strings.Contains(name, "postgres") {
+			continue
+		}
 		ctr := &MonitarrContainer{
 			Id:   v.ID,
-			Name: v.Names[0],
+			Name: name[1:],
 		}
 		reader, err := m.helper.GetContianerLogs(ctr.Id)
 		if err != nil {
